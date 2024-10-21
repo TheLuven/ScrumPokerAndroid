@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "377735137489",
+    "project_id": "projet-de-fin-android",
+    "storage_bucket": "projet-de-fin-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377735137489:android:c3d14fc007d0a5f500ddf0",
+        "android_client_info": {
+          "package_name": "fr.eseo.ld.android.vv.poker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377735137489-bnarmri3b0esj8615jf5fnbpkpia8js7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fr.eseo.ld.android.vv.poker",
+            "certificate_hash": "eaad05d59d584bc4e4ec871e48a47aa23f783c44"
+          }
+        },
+        {
+          "client_id": "377735137489-046iun9lb4vadk54e3u84epeud4fdd00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL5ZNyDNGIK_0PfEkxCik-OfZ7HgVTFc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377735137489-046iun9lb4vadk54e3u84epeud4fdd00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
