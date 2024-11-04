@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,17 +25,22 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import fr.eseo.ld.android.vv.poker.ui.UserRole
+import fr.eseo.ld.android.vv.poker.ui.navigation.PokerScreens
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
 
 @Composable
 fun MainScreen(
     onLogout: () -> Unit,
     navController: NavHostController,
-    viewModel: AuthenticationViewModel,
+    viewModel: AuthenticationViewModel
 ) {
     val currentUser by viewModel.user.observeAsState()
     var userRole by remember { mutableStateOf<UserRole?>(null) } // State for user role
     val db = FirebaseFirestore.getInstance()
+    var userName by remember { mutableStateOf("") }
+    var userSurname by remember { mutableStateOf("") }
+    var showNameFields by remember { mutableStateOf(false) }
+
     LaunchedEffect(key1 = currentUser) {
         if (currentUser != null) {
             db.collection("users").document(currentUser!!.uid).get()
@@ -75,8 +81,52 @@ fun MainScreen(
     ) {
         if (currentUser != null) {
             Text("User Role: ${userRole?.name}", style = MaterialTheme.typography.bodyMedium)
-            Button(onClick = { /*navController.navigate(PokerScreens.GameScreen.route)*/ }) {
-                Text("Game")
+
+            if (showNameFields) {
+                // Display name and surname fields
+                OutlinedTextField(
+                    value = userName,
+                    onValueChange = { userName = it },
+                    label = { Text("Name") }
+                )
+                OutlinedTextField(
+                    value = userSurname,
+                    onValueChange = { userSurname = it },
+                    label = { Text("Surname") }
+                )
+                Button(onClick = {
+                    // Save name and surname to Firestore
+                    val updates = hashMapOf<String, Any>(
+                        "name" to userName,
+                        "surname" to userSurname
+                    )
+                    db.collection("users").document(currentUser!!.uid).update(updates)
+                    showNameFields = false // Hide fields after saving
+                }) {
+                    Text("Save")
+                }
+            } else {
+                // Check if name and surname are present
+                LaunchedEffect(key1 = currentUser) {
+                    db.collection("users").document(currentUser!!.uid).get()
+                        .addOnSuccessListener { document ->
+                            val name = document.getString("name")
+                            val surname = document.getString("surname")
+                            if (name == null || surname == null) {
+                                showNameFields = true // Show fields if missing
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle error retrieving name and surname
+                        }
+                }
+
+                // Display "Game" button if name and surname are present
+                if (!showNameFields && userRole == UserRole.TEACHER) {
+                    Button(onClick = { navController.navigate(PokerScreens.TEAMS.id) }) {
+                        Text("TEAMS")
+                    }
+                }
             }
         } else {
             Text("You are not logged in.", style = MaterialTheme.typography.bodyMedium)

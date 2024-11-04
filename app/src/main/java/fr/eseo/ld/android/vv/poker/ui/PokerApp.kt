@@ -18,12 +18,15 @@ import fr.eseo.ld.android.vv.poker.ui.composable.TopAppBar
 import fr.eseo.ld.android.vv.poker.ui.navigation.PokerScreens
 import fr.eseo.ld.android.vv.poker.ui.screens.ConnectionScreen
 import fr.eseo.ld.android.vv.poker.ui.screens.MainScreen
+import fr.eseo.ld.android.vv.poker.ui.screens.TeamScreen
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
+import fr.eseo.ld.android.vv.poker.ui.viewmodels.TeamViewModel
 
 @Composable
 fun PokerApp(
     navController: NavHostController = rememberNavController(),
-    authenticationViewModel: AuthenticationViewModel = hiltViewModel()
+    authenticationViewModel: AuthenticationViewModel = hiltViewModel(),
+    teamViewModel: TeamViewModel = hiltViewModel()
 ) {
     Log.v("PokerApp", "PokerApp")
     NavHost(navController = navController, startDestination = "start") {
@@ -46,7 +49,6 @@ fun PokerApp(
             ConnectionScreen(navController,authenticationViewModel)
         }
         composable(PokerScreens.MAIN.id) {
-
             TopAppBar(
                 viewModel = authenticationViewModel,
                 onLogout = { authenticationViewModel.logout() },
@@ -56,6 +58,13 @@ fun PokerApp(
                 onLogout = { authenticationViewModel.logout() },
                 navController = navController,
                 viewModel = authenticationViewModel
+            )
+        }
+        composable(PokerScreens.TEAMS.id) {
+            TeamScreen(
+                navController = navController,
+                teamViewModel = teamViewModel,
+                authenticationViewModel = authenticationViewModel
             )
         }
     }
