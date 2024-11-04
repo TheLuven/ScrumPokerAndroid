@@ -62,19 +62,12 @@ fun ConnectionScreen(
     LaunchedEffect(loginResult) {
         when (loginResult) {
             is LoginResult.Success -> {
-                if(currentUser?.email == null) {
-                    //clear login result
-                    loginResult as LoginResult.Error
-                    Log.v("ConnectionScreen", "loginAnonymously")
-                    authenticationViewModel.loginAnonymously()
-                }else {
-                    snackbarHostState.showSnackbar(
-                        message = "Login successful!",
-                        duration = SnackbarDuration.Short
-                    )
-                    Log.v("ConnectionScreen", "navigate to Main menu")
-                    navController.navigate(PokerScreens.MAIN.id)
-                }
+                snackbarHostState.showSnackbar(
+                    message = "Login successful!",
+                    duration = SnackbarDuration.Short
+                )
+                Log.v("ConnectionScreen", "navigate to Main menu")
+                navController.navigate(PokerScreens.MAIN.id)
             }
             else -> {}
         }

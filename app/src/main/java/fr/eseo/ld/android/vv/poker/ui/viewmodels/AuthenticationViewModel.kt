@@ -46,6 +46,15 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun signUp(email: String, password: String) {
+        //Verify if the email adresse already exists
+        authenticationRepository.getUserByEmail(email).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                _loginResult.value = LoginResult.Error("This email address is already in use.")
+                Log.v("AuthenticationViewModel", "email already in use")
+                _user.value = null
+                return@addOnCompleteListener //TODO FInish the same email error and handler
+            }
+        }
         if (email.isEmpty()) {
             _loginResult.value = LoginResult.Error("Please enter an email address.")
             Log.v("AuthenticationViewModel", "email empty")
@@ -109,7 +118,8 @@ class AuthenticationViewModel @Inject constructor(
         authenticationRepository.loginWithEmail(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _user.value = authenticationRepository.getCurrentUser()
+                    val currentUser = authenticationRepository.getCurrentUser()
+                    _user.value = currentUser
                     _loginResult.value = LoginResult.Success
                     Log.v("AuthenticationViewModel", "login success")
                 } else {

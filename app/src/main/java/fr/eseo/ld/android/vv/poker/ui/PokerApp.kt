@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
+import fr.eseo.ld.android.vv.poker.ui.composable.TopAppBar
 import fr.eseo.ld.android.vv.poker.ui.navigation.PokerScreens
 import fr.eseo.ld.android.vv.poker.ui.screens.ConnectionScreen
 import fr.eseo.ld.android.vv.poker.ui.screens.MainScreen
@@ -45,10 +46,16 @@ fun PokerApp(
             ConnectionScreen(navController,authenticationViewModel)
         }
         composable(PokerScreens.MAIN.id) {
+
+            TopAppBar(
+                viewModel = authenticationViewModel,
+                onLogout = { authenticationViewModel.logout() },
+                navController = navController
+            )
             MainScreen(
                 onLogout = { authenticationViewModel.logout() },
                 navController = navController,
-                viewModel = authenticationViewModel // Pass the viewModel
+                viewModel = authenticationViewModel
             )
         }
     }

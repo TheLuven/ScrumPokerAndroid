@@ -46,4 +46,7 @@ class AuthenticationRepository @Inject constructor (
 
     fun loginWithGoogle(idToken: String) =
         firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
+
+    fun getUserByEmail(email: String)=
+        firebaseAuth.fetchSignInMethodsForEmail(email)
 }
