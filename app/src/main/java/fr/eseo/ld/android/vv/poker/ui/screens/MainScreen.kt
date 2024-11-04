@@ -37,7 +37,7 @@ fun MainScreen(
         if (currentUser != null) {
             Text("Hello, ${currentUser!!.email}!", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {onLogout
+            Button(onClick = { onLogout()
                 navController.navigate("start") {
                     popUpTo("start") { inclusive = true }
                 }

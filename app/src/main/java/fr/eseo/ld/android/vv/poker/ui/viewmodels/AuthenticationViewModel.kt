@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.eseo.ld.android.vv.poker.repositories.AuthenticationRepository
 import javax.inject.Inject
@@ -126,7 +127,18 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun logout() {
-        authenticationRepository.logout()
+        val currentUser = authenticationRepository.getCurrentUser()
+        if (currentUser != null && currentUser.providerData.any { it.providerId == GoogleAuthProvider.PROVIDER_ID }) {
+            // User is logged in with Google, call logoutGoogle()
+            Log.v("AuthenticationViewModel", "logout google")
+            authenticationRepository.logoutGoogle()
+            _loginResult.value = LoginResult.Error("You have been logged out.")
+        } else {
+            // User is not logged in with Google, call logout()
+            Log.v("AuthenticationViewModel", "logout")
+            authenticationRepository.logout()
+            _loginResult.value = LoginResult.Error("You have been logged out.")
+        }
         loginAnonymously()
     }
 
