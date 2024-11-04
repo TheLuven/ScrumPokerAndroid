@@ -1,6 +1,7 @@
 package fr.eseo.ld.android.vv.poker.repositories
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor (
@@ -21,4 +22,7 @@ class AuthenticationRepository @Inject constructor (
 
     fun getCurrentUser() =
         firebaseAuth.currentUser
+
+    fun loginWithGoogle(idToken: String) =
+        firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
 }

@@ -130,6 +130,27 @@ class AuthenticationViewModel @Inject constructor(
         loginAnonymously()
     }
 
+    fun signInWithGoogle(idToken: String) {
+        authenticationRepository.loginWithGoogle(idToken)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _user.value = authenticationRepository.getCurrentUser()
+                    _loginResult.value = LoginResult.Success
+                    Log.v("AuthenticationViewModel", "login success")
+                } else {
+                    _user.value = null
+                    val exception = task.exception
+                    val errorMessage = when (exception) {
+                        is FirebaseAuthInvalidUserException -> "Invalid user credentials."
+                        is FirebaseAuthInvalidCredentialsException -> "Invalid email or password."
+                        else -> "Login failed. Please try again later."
+                    }
+                    Log.v("AuthenticationViewModel", errorMessage)
+                    _loginResult.value = LoginResult.Error(errorMessage)
+                }
+            }
+    }
+
 }
 sealed class LoginResult {
     object Success : LoginResult()
