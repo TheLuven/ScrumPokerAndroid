@@ -18,15 +18,19 @@ import fr.eseo.ld.android.vv.poker.ui.composable.TopAppBar
 import fr.eseo.ld.android.vv.poker.ui.navigation.PokerScreens
 import fr.eseo.ld.android.vv.poker.ui.screens.ConnectionScreen
 import fr.eseo.ld.android.vv.poker.ui.screens.MainScreen
+import fr.eseo.ld.android.vv.poker.ui.screens.ScrumTeamsScreen
+import fr.eseo.ld.android.vv.poker.ui.screens.StoriesScreen
 import fr.eseo.ld.android.vv.poker.ui.screens.TeamScreen
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.TeamViewModel
+import fr.eseo.ld.android.vv.poker.ui.viewmodels.UserStoryViewModel
 
 @Composable
 fun PokerApp(
     navController: NavHostController = rememberNavController(),
     authenticationViewModel: AuthenticationViewModel = hiltViewModel(),
-    teamViewModel: TeamViewModel = hiltViewModel()
+    teamViewModel: TeamViewModel = hiltViewModel(),
+    userStoryViewModel: UserStoryViewModel = hiltViewModel()
 ) {
     Log.v("PokerApp", "PokerApp")
     NavHost(navController = navController, startDestination = "start") {
@@ -57,7 +61,8 @@ fun PokerApp(
             MainScreen(
                 onLogout = { authenticationViewModel.logout() },
                 navController = navController,
-                viewModel = authenticationViewModel
+                viewModel = authenticationViewModel,
+                teamViewModel = teamViewModel
             )
         }
         composable(PokerScreens.TEAMS.id) {
@@ -66,6 +71,16 @@ fun PokerApp(
                 teamViewModel = teamViewModel,
                 authenticationViewModel = authenticationViewModel
             )
+        }
+        composable(PokerScreens.SCRUM_TEAMS.id) { ScrumTeamsScreen(navController, teamViewModel,authenticationViewModel) }
+        composable(PokerScreens.STORIES.id+"/{teamId}") { backStackEntry ->
+            val teamId = backStackEntry.arguments?.getString("teamId")
+            StoriesScreen(
+                teamId,
+                navController,
+                teamViewModel,
+                authenticationViewModel,
+                userStoryViewModel) // Pass teamId to StoriesScreen
         }
     }
 }

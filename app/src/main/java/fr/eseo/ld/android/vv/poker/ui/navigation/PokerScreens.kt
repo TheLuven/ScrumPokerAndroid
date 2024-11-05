@@ -4,4 +4,6 @@ enum class PokerScreens (val id: String) {
     CONNECTION("connection_screen"),
     MAIN("main_screen"),
     TEAMS("team_screen"),
+    STORIES("stories_screen"),
+    SCRUM_TEAMS("scrum_teams_screen")
 }

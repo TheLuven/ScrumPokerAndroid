@@ -27,12 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import fr.eseo.ld.android.vv.poker.ui.UserRole
 import fr.eseo.ld.android.vv.poker.ui.navigation.PokerScreens
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
+import fr.eseo.ld.android.vv.poker.ui.viewmodels.TeamViewModel
 
 @Composable
 fun MainScreen(
     onLogout: () -> Unit,
     navController: NavHostController,
-    viewModel: AuthenticationViewModel
+    viewModel: AuthenticationViewModel,
+    teamViewModel: TeamViewModel
 ) {
     val currentUser by viewModel.user.observeAsState()
     var userRole by remember { mutableStateOf<UserRole?>(null) } // State for user role
@@ -40,6 +42,10 @@ fun MainScreen(
     var userName by remember { mutableStateOf("") }
     var userSurname by remember { mutableStateOf("") }
     var showNameFields by remember { mutableStateOf(false) }
+
+    val teams by teamViewModel.teams.observeAsState(emptyList())
+
+    val isScrumMaster = teams.any { team -> team.scrumMasterEmail == currentUser?.email }
 
     LaunchedEffect(key1 = currentUser) {
         if (currentUser != null) {
@@ -125,6 +131,13 @@ fun MainScreen(
                 if (!showNameFields && userRole == UserRole.TEACHER) {
                     Button(onClick = { navController.navigate(PokerScreens.TEAMS.id) }) {
                         Text("TEAMS")
+                    }
+                }
+                if (isScrumMaster && userRole == UserRole.USER) {
+                    Button(onClick = {
+                        navController.navigate(PokerScreens.SCRUM_TEAMS.id) // Navigate to Scrum screen
+                    }) {
+                        Text("Scrum")
                     }
                 }
             }

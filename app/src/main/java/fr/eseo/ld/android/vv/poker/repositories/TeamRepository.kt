@@ -1,12 +1,20 @@
 package fr.eseo.ld.android.vv.poker.repositories
 
+import androidx.activity.result.launch
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import fr.eseo.ld.android.vv.poker.model.Team
+import fr.eseo.ld.android.vv.poker.model.UserStory
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class TeamRepository @Inject constructor(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val userStoryRepository: UserStoryRepository
 ) {
 
     suspend fun updateTeam(team: Team) {
@@ -64,6 +72,16 @@ class TeamRepository @Inject constructor(
                 teamRef.update("members", updatedMembers)
             }
         }
+    }
+
+    suspend fun addUserStoryToTeam(teamId: String, userStoryId: String) {
+        val teamRef = db.collection("teams").document(teamId)
+        teamRef.update("userStories", FieldValue.arrayUnion(userStoryId)).await()
+    }
+
+    suspend fun removeUserStoryFromTeam(teamId: String, userStoryId: String) {
+        val teamRef = db.collection("teams").document(teamId)
+        teamRef.update("userStories", FieldValue.arrayRemove(userStoryId)).await()
     }
 
 }

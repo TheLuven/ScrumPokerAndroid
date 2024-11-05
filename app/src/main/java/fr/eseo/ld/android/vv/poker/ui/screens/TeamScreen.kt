@@ -1,7 +1,5 @@
 package fr.eseo.ld.android.vv.poker.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,10 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import fr.eseo.ld.android.vv.poker.model.Team
-import fr.eseo.ld.android.vv.poker.ui.composable.AddTeamPopup
-import fr.eseo.ld.android.vv.poker.ui.composable.ModifyTeamPopup
+import fr.eseo.ld.android.vv.poker.ui.composable.team.AddTeamPopup
+import fr.eseo.ld.android.vv.poker.ui.composable.team.ModifyTeamPopup
 import fr.eseo.ld.android.vv.poker.ui.composable.TopAppBarBackButton
-import fr.eseo.ld.android.vv.poker.ui.composable.UserSelectionDialog
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.TeamViewModel
 

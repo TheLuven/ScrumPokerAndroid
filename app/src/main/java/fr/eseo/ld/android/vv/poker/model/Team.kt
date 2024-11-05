@@ -6,6 +6,7 @@ data class Team(
     val id: String = "",
     val name: String = "",
     val members: List<String> = emptyList(),
+    val userStories: List<String> = emptyList(),
     val creationDate: Date = Date(),
     val modificationDate: Date = Date(),
     val scrumMasterEmail: String = "",

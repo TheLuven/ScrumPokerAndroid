@@ -1,10 +1,8 @@
-package fr.eseo.ld.android.vv.poker.ui.composable
+package fr.eseo.ld.android.vv.poker.ui.composable.team
 
-import androidx.compose.animation.core.copy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -31,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import fr.eseo.ld.android.vv.poker.model.Team
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.AuthenticationViewModel
 import fr.eseo.ld.android.vv.poker.ui.viewmodels.TeamViewModel
-import kotlin.collections.addAll
 import kotlin.collections.forEach
 
 @OptIn(ExperimentalMaterial3Api::class)

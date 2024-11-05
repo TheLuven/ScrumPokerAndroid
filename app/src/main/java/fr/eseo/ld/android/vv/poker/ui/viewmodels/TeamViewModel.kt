@@ -6,21 +6,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.eseo.ld.android.vv.poker.model.Team
+import fr.eseo.ld.android.vv.poker.model.UserStory
 import fr.eseo.ld.android.vv.poker.repositories.TeamRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TeamViewModel @Inject constructor(
-    private val teamRepository: TeamRepository
+    private val teamRepository: TeamRepository,
 ) : ViewModel() {
 
     private val _teams = MutableLiveData<List<Team>>()
     val teams: MutableLiveData<List<Team>> = _teams
 
+    private val _userStories = MutableStateFlow<List<UserStory>>(emptyList())
+    val userStories: StateFlow<List<UserStory>> = _userStories.asStateFlow()
+
     init {
         getTeams()
     }
+
     fun updateTeam(team: Team) {
         viewModelScope.launch {
             teamRepository.updateTeam(team) // Add updateTeam to repository
@@ -55,9 +63,24 @@ class TeamViewModel @Inject constructor(
         }
     }
 
+    fun addUserStory(userStory: UserStory, teamId: String) {
+        viewModelScope.launch {
+            teamRepository.addUserStoryToTeam(teamId = teamId, userStoryId = userStory.id)
+        }
+    }
+    fun removeUserStory(userStory: UserStory, teamId: String) {
+        viewModelScope.launch {
+            teamRepository.removeUserStoryFromTeam(teamId = teamId, userStoryId = userStory.id)
+        }
+    }
+
     fun reloadTeams() {
         viewModelScope.launch {
             _teams.value = teamRepository.getTeams()
         }
+    }
+
+    fun getTeam(teamId: String): Team? {
+        return _teams.value?.find { it.id == teamId }
     }
 }
